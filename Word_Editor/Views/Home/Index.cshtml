@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Word Editor in ASP.NET";
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="Home" asp-action="UploadFile" method="post" class="form-inline"
+              enctype="multipart/form-data">
+            <br />
+            <div class="form-group">
+                <input type="file" name="file" accept=".doc, .docx" class="form-control custom-file-input" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="form-control btn btn-primary">Open</button>
+            </div>
+            <div class="form-group" style="position:relative; float :right">
+                <button type="button" id="download" class="form-control btn btn-success" value="Save and Download">Save and Download</button>
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="Index" id="formDownload">
+            <textarea name="editor" id="editor" rows="80" cols="100">
+                @if (ViewBag.HtmlContent == null)
+                 {
+                    <p>Write something or open an existing Word document. </p>
+                 }
+                 else
+                 {
+                     @ViewBag.HtmlContent;
+                 }
+                </textarea>
+        </form>
+    </div>
+</div>
+<!-- suneditor -->
+<link href="~/suneditor/dist/css/suneditor.min.css" rel="stylesheet">
+<!-- suneditor -->
+<script src="~/suneditor/dist/suneditor.min.js"></script>
+<script>
+    var suneditor = SUNEDITOR.create('editor', {
+        display: 'block',
+        width: '100%',
+        height: '30%',
+        popupDisplay: 'full',
+        buttonList: [
+            ['font', 'fontSize', 'formatBlock'],
+            ['paragraphStyle', 'blockquote'],
+            ['bold', 'underline', 'align', 'strike', 'subscript', 'superscript', 'horizontalRule', 'list'],
+            ['table', 'link', 'image'],
+            ['align', 'horizontalRule', 'list', 'lineHeight'],
+            ['codeView']
+        ],
+        placeholder: 'Start typing something...'
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#download").click(function () {
+            suneditor.save();
+            $("#formDownload").submit();
+        });
+    });
+</script>
+
